@@ -1,0 +1,28 @@
+pipeline{
+    agent any
+    stages{
+        stage('checking code in github'){
+            steps{
+                git 'https://github.com/durkeshwaran1103/demoproject.git'
+            }
+        }
+        stage('build a docker image'){
+            steps{
+                 sh 'docker build -t webapplication .'
+            }
+        }
+        stage('running a docker container'){
+            steps{
+                sh 'docker run -dt -p 81:80 --name demo-project webapplication'
+            }
+        }
+    }
+    post{
+        success{
+            echo 'docker container running successfully'
+        }
+        failure{
+            echo 'docker container failed'
+        }
+    }
+} 
